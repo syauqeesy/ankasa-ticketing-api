@@ -1,0 +1,18 @@
+{
+  "name": "ankasa-ticketing-api",
+  "version": "1.0.0",
+  "description": "Ankasa Ticketing API",
+  "main": "index.js",
+  "author": "Ahmad Syauqi",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "sequelize-cli": "^6.2.0"
+  }
+}
