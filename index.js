@@ -14,6 +14,8 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/users', user)
 
+app.use('/upload', express.static('./images'))
+
 app.listen(process.env.PORT, async () => {
   console.log(`Server running on port ${process.env.PORT}`)
   await sequelize.authenticate()

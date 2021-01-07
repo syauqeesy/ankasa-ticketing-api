@@ -3,11 +3,11 @@ const router = require('express').Router()
 const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { uploadMulter } = require('../middlewares/upload')
 
 module.exports = router
   .post('/register', async (req, res) => {
     try {
-      const id = uuidv4()
       const { fullName, email, password } = req.body
 
       const data = await User.findOne({ where: { email: req.body.email } })
@@ -19,7 +19,7 @@ module.exports = router
       } else {
         bcrypt.genSalt(10, function (err, salt) {
           bcrypt.hash(password, salt, function (err, hash) {
-            User.create({ id: id, fullName: fullName, email: email, password: hash, createdAt: new Date() })
+            User.create({ fullName: fullName, email: email, password: hash, createdAt: new Date() })
             return res.status(200).json({
               status: 'Success',
               message: 'Register success'
@@ -82,6 +82,31 @@ module.exports = router
         data: data
       })
     } catch(error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!',
+      })
+    }
+  })
+  .patch('/:idUser', uploadMulter.single('avatar'), async (req, res) => {
+    try {
+      const id = req.params.idUser
+      const checkId = await User.findOne({ where: { id: id } })
+      if (!checkId){
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'ID User not Found'
+        })
+      }
+
+      const { email, phoneNumber, fullName, city, address, postCode } = req.body
+      await User.update({ avatar: `${process.env.BASE_URL}/upload/${req.file.filename}`, fullName: fullName, email: email, phoneNumber: phoneNumber, city: city, address: address, postCode: postCode, updatedAt: new Date()}, {where: {id: id}})
+      res.status(200).json({
+        status: 'Success',
+        message: 'Data user has been updated'
+      })
+    } catch(error){
       console.log(error)
       return res.status(500).json({
         status: 'Failed',
