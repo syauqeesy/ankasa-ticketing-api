@@ -11,7 +11,7 @@ module.exports = router
       const { fullName, email, password } = req.body
 
       const data = await User.findOne({ where: { email: req.body.email } })
-      if (data){
+      if (data) {
         res.status(400).json({
           status: 'Failed',
           message: 'email already exists'
@@ -38,39 +38,41 @@ module.exports = router
   .post('/login', async (req, res) => {
     try {
       const data = await User.findOne({ where: { email: req.body.email } })
-      if (!data){
+      if (!data) {
         res.json({
           message: 'Email not found'
         })
-      } else (
-        
-        bcrypt.compare(req.body.password, data.password, function (err, resCheck) {
-          if (!resCheck) {
-            res.status(401).json({
-              status: 'Failed',
-              message: 'Password Wrong'
-            })
-          }
+      } else {
+        (
 
-          jwt.sign({ idUser: data.id, email: data.email }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (err, token) {
-            const dataLogin = {
-              id: data.id,
-              email: data.email,
-              token: token
+          bcrypt.compare(req.body.password, data.password, function (err, resCheck) {
+            if (!resCheck) {
+              res.status(401).json({
+                status: 'Failed',
+                message: 'Password Wrong'
+              })
             }
-            res.status(200).json({
-              status: 'Success',
-              message: 'Login Success',
-              data: dataLogin
+
+            jwt.sign({ idUser: data.id, email: data.email }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (err, token) {
+              const dataLogin = {
+                id: data.id,
+                email: data.email,
+                token: token
+              }
+              res.status(200).json({
+                status: 'Success',
+                message: 'Login Success',
+                data: dataLogin
+              })
             })
           })
-        })
-      )
-    } catch(error) {
+        )
+      }
+    } catch (error) {
       console.log(error)
       return res.status(500).json({
         status: 'Failed',
-        message: 'Internal server error!',
+        message: 'Internal server error!'
       })
     }
   })
@@ -79,13 +81,13 @@ module.exports = router
       const data = await User.findOne({ where: { id: req.params.idUser } })
       return res.status(200).json({
         status: 'Success',
-        data: data
+        data: { ...data.dataValues, avatar: `${process.env.BASE_URL}/images/${data.avatar}` }
       })
-    } catch(error) {
+    } catch (error) {
       console.log(error)
       return res.status(500).json({
         status: 'Failed',
-        message: 'Internal server error!',
+        message: 'Internal server error!'
       })
     }
   })
