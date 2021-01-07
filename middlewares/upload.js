@@ -12,19 +12,19 @@ const storage = multer.diskStorage({
 })
 
 const limit = {
-    fileSize: 3 * 1000000
+    fileSize: 1 * 1000000
 }
 
-function fileFilter(req, file, cb) {
-    const extName = path.extname(file.originalname)
-  
-    if (extName === '.jpg' || extName === '.jpeg' || extName === '.gif' || extName === '.png') {
-      // To accept the file pass `true`, like so:
-      cb(null, true)
-    }else{
-      // To reject this file pass `false`,or give just error like so:
-      cb(new Error('Rejected: File accepted only JPG, JPEG, GIF & PNG.'))
-    }
+
+const fileFilter = function (req, file, callback) {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    return callback(null, true)
+  }
+  callback(req.res.status(400).json(
+    { 
+      status: 'Failed',
+      message: 'Avatar must be an image' })
+  )
 }
 
 const upload = multer({

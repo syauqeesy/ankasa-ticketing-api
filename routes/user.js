@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { uploadMulter } = require('../middlewares/upload')
+const authenticationToken = require('../helpers/authentificationToken')
 
 module.exports = router
   .post('/register', async (req, res) => {
@@ -76,7 +77,7 @@ module.exports = router
       })
     }
   })
-  .get('/:idUser', async (req, res) => {
+  .get('/:idUser', authenticationToken, async (req, res) => {
     try {
       const data = await User.findOne({ where: { id: req.params.idUser } })
       return res.status(200).json({
