@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
 })
 
 const limit = {
-    fileSize: 1 * 1000000
+    fileSize: 1500000
 }
 
 

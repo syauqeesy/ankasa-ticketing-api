@@ -1,10 +1,32 @@
 const { User } = require('../models')
 const router = require('express').Router()
-const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcrypt')
+const multer = require('multer')
 const jwt = require('jsonwebtoken')
 const { uploadMulter } = require('../middlewares/upload')
 const authenticationToken = require('../helpers/authentificationToken')
+
+const upload = (req, res, next) => {
+  const handleUpload = uploadMulter.single('avatar')
+  handleUpload(req, res, error => {
+    if (error instanceof multer.MulterError) {
+      return res.status(400).send({
+        status: 'Failed',
+        message: error.message
+      })
+    }
+
+    if (error) {
+      console.log(error)
+      return res.status(500).send({
+        status: 'Failed',
+        message: 'Internal server error'
+      })
+    }
+
+    next()
+  })
+}
 
 module.exports = router
   .post('/register', async (req, res) => {
@@ -92,7 +114,7 @@ module.exports = router
       })
     }
   })
-  .patch('/:idUser', authenticationToken, uploadMulter.single('avatar'), async (req, res) => {
+  .patch('/:idUser', authenticationToken, upload, async (req, res) => {
     try {
       const id = req.params.idUser
       const checkId = await User.findOne({ where: { id: id } })
@@ -108,7 +130,7 @@ module.exports = router
       }
 
       const { email, phoneNumber, fullName, city, address, postCode } = req.body
-      await User.update({ avatar: `${avatar}`, fullName: fullName, email: email, phoneNumber: phoneNumber, city: city, address: address, postCode: postCode, updatedAt: new Date()}, {where: {id: id}})
+      await User.update({ avatar: `${avatar}`, fullName: fullName || checkId.fullName, email: email || checkId.email, phoneNumber: phoneNumber || checkId.phoneNumber, city: city || checkId.city, address: address || checkId.address, postCode: postCode || checkId.postCode, updatedAt: new Date()}, {where: {id: id}})
       res.status(200).json({
         status: 'Success',
         message: 'Data user has been updated'
