@@ -15,6 +15,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      airlineClass: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      code: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      terminal: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      gate: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       from: {
         type: Sequelize.STRING,
         allowNull: false
@@ -23,7 +39,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      departuretime: {
+      departureTime: {
         type: Sequelize.DATE,
         allowNull: false
       },

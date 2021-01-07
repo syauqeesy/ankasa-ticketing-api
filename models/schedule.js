@@ -29,6 +29,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    airlineClass: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    code: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    terminal: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    gate: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     from: {
       type: DataTypes.STRING,
       allowNull: false
@@ -37,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    departuretime: {
+    departureTime: {
       type: DataTypes.DATE,
       allowNull: false
     },
