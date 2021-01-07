@@ -35,28 +35,6 @@ module.exports = router
       })
     }
   })
-  // .post('/register', (req, res) => {
-  //   try {
-  //     const id = uuidv4()
-  //     const { fullname, email, password } = req.body
-
-  //     bcrypt.genSalt(10, function (err, salt) {
-  //       bcrypt.hash(password, salt, function (err, hash) {
-  //         const register = User.create({ id: id, fullName: fullname, email: email, password: hash, createdAt: new Date() })
-  //         return res.status(200).json({
-  //           status: 'Success',
-  //           message: 'Register success'
-  //         })
-  //       })
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //     return res.status(500).json({
-  //       status: 'Failed',
-  //       message: 'Internal server error!',
-  //     })
-  //   }
-  // })
   .post('/login', async (req, res) => {
     try {
       const data = await User.findOne({ where: { email: req.body.email } })
