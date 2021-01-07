@@ -1,4 +1,4 @@
-const { User } = require('../models') 
+const { User } = require('../models')
 const router = require('express').Router()
 
 module.exports = router
@@ -12,7 +12,7 @@ module.exports = router
       console.log(error)
       return res.status(500).json({
         status: 'Failed',
-        message: 'Internal server error!',
+        message: 'Internal server error!'
       })
     }
   })
