@@ -101,9 +101,13 @@ module.exports = router
           message: 'ID User not Found'
         })
       }
+      let avatar = 'user_default.jpg'
+      if (req.file) {
+        avatar = req.file.filename
+      }
 
       const { email, phoneNumber, fullName, city, address, postCode } = req.body
-      await User.update({ avatar: `${process.env.BASE_URL}/upload/${req.file.filename}`, fullName: fullName, email: email, phoneNumber: phoneNumber, city: city, address: address, postCode: postCode, updatedAt: new Date()}, {where: {id: id}})
+      await User.update({ avatar: `${avatar}`, fullName: fullName, email: email, phoneNumber: phoneNumber, city: city, address: address, postCode: postCode, updatedAt: new Date()}, {where: {id: id}})
       res.status(200).json({
         status: 'Success',
         message: 'Data user has been updated'
