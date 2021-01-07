@@ -92,7 +92,7 @@ module.exports = router
       })
     }
   })
-  .patch('/:idUser', uploadMulter.single('avatar'), async (req, res) => {
+  .patch('/:idUser', authenticationToken, uploadMulter.single('avatar'), async (req, res) => {
     try {
       const id = req.params.idUser
       const checkId = await User.findOne({ where: { id: id } })
