@@ -91,3 +91,35 @@ module.exports = router
       })
     }
   })
+  .get('/:scheduleId', [authenticationToken], async (req, res) => {
+    try {
+      const schedule = await Schedule.findOne({
+        where: {
+          id: req.params.scheduleId
+        },
+        include: {
+          model: Facility,
+          as: 'facilities'
+        }
+      })
+
+      if (!schedule) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'Schedule not found'
+        })
+      }
+
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Schedule data fetched',
+        schedule
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error'
+      })
+    }
+  })
