@@ -124,7 +124,8 @@ module.exports = router
           message: 'ID User not Found'
         })
       }
-      let avatar = 'user_default.jpg'
+
+      let avatar = checkId.avatar
       if (req.file) {
         avatar = req.file.filename
       }
