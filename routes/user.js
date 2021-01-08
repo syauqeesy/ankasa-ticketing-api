@@ -76,10 +76,11 @@ module.exports = router
               })
             }
 
-            jwt.sign({ idUser: data.id, email: data.email }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (err, token) {
+            jwt.sign({ idUser: data.id, email: data.email, role: data.role }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (err, token) {
               const dataLogin = {
                 id: data.id,
                 email: data.email,
+                role: data.role,
                 token: token
               }
               res.status(200).json({
