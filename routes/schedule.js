@@ -2,9 +2,11 @@ const { Schedule, Facility } = require('../models')
 const { Op } = require('sequelize')
 const router = require('express').Router()
 const moment = require('moment')
+const authenticationToken = require('../helpers/authentificationToken')
+const verifyRole = require('../helpers/verifyRole')
 
 module.exports = router
-  .post('/create', async (req, res) => {
+  .post('/create', [authenticationToken, verifyRole], async (req, res) => {
     try {
       const { airline, airlineClass, code, terminal, gate, from, to, departureTime, arrivedTime, price, transit, facilities } = req.body
       let airlineLogo = airline + '.png'
@@ -27,7 +29,7 @@ module.exports = router
       })
     }
   })
-  .get('/', async (req, res) => {
+  .get('/', [authenticationToken], async (req, res) => {
     try {
       const index = parseInt(req.query.page) || 1
       const numOfSchedules = await Schedule.findAll({
@@ -54,7 +56,12 @@ module.exports = router
         },
         include: {
           model: Facility,
-          as: 'facilities'
+          as: 'facilities',
+          where: {
+            facility: {
+              [Op.like]: `%${req.query.facility || ''}%`
+            }
+          }
         },
         limit: 10,
         offset: index * 10 - 10
