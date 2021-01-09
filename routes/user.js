@@ -117,7 +117,7 @@ module.exports = router
     try {
       const id = req.params.idUser
       const checkId = await User.findOne({ where: { id: id } })
-      if (!checkId){
+      if (!checkId) {
         return res.status(404).json({
           status: 'Failed',
           message: 'ID User not Found'
@@ -130,16 +130,16 @@ module.exports = router
       }
 
       const { email, phoneNumber, fullName, city, address, postCode } = req.body
-      await User.update({ avatar: `${avatar}`, fullName: fullName || checkId.fullName, email: email || checkId.email, phoneNumber: phoneNumber || checkId.phoneNumber, city: city || checkId.city, address: address || checkId.address, postCode: postCode || checkId.postCode, updatedAt: new Date()}, {where: {id: id}})
+      await User.update({ avatar: `${avatar}`, fullName: fullName || checkId.fullName, email: email || checkId.email, phoneNumber: phoneNumber || checkId.phoneNumber, city: city || checkId.city, address: address || checkId.address, postCode: postCode || checkId.postCode, updatedAt: new Date() }, { where: { id: id } })
       res.status(200).json({
         status: 'Success',
         message: 'Data user has been updated'
       })
-    } catch(error){
+    } catch (error) {
       console.log(error)
       return res.status(500).json({
         status: 'Failed',
-        message: 'Internal server error!',
+        message: 'Internal server error!'
       })
     }
   })

@@ -53,3 +53,107 @@ module.exports = router
       })
     }
   })
+  .get('/my-booking/:userId', authenticationToken, async (req, res) => {
+    try {
+      const myBookings = await User.findOne({
+        where: {
+          id: req.params.userId
+        },
+        include: {
+          model: Ticket,
+          as: 'tickets',
+          include: {
+            model: Schedule,
+            as: 'schedule'
+          }
+        }
+      })
+
+      if (myBookings.tickets.length < 1) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'Bookings not found!'
+        })
+      }
+
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Bookings found!',
+        myBookings
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })
+  .get('/history/:userId', authenticationToken, async (req, res) => {
+    try {
+      const history = await User.findOne({
+        where: {
+          id: req.params.userId
+        },
+        include: {
+          model: Ticket,
+          as: 'tickets',
+          include: {
+            model: Schedule,
+            as: 'schedule'
+          }
+        }
+      })
+
+      if (history.tickets.length < 1) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'Bookings not found!'
+        })
+      }
+
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Bookings found!',
+        history
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })
+  .get('/booking-detail/:ticketId', authenticationToken, async (req, res) => {
+    try {
+      const booking = await Ticket.findOne({
+        where: {
+          id: req.params.ticketId
+        },
+        include: {
+          model: Schedule,
+          as: 'schedule'
+        }
+      })
+
+      if (!booking) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'Booking not found!'
+        })
+      }
+
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Booking found!',
+        booking
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })

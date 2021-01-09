@@ -9,7 +9,7 @@ module.exports = router
   .post('/create', [authenticationToken, verifyRole], async (req, res) => {
     try {
       const { airline, airlineClass, code, terminal, gate, from, to, departureTime, arrivedTime, price, transit, facilities } = req.body
-      let airlineLogo = airline + '.png'
+      const airlineLogo = airline + '.png'
 
       const schedule = await Schedule.create({ airlineLogo, airline, airlineClass, code, terminal, from, to, departureTime, gate, arrivedTime, price, transit })
 
@@ -52,7 +52,7 @@ module.exports = router
           },
           transit: {
             [Op.like]: `%${req.query.transit || ''}%`
-          },
+          }
         },
         include: {
           model: Facility,
