@@ -17,7 +17,7 @@ const limit = {
 
 
 const fileFilter = function (req, file, callback) {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype !== 'image/jpeg' || file.mimetype !== 'image/png') {
     return callback(null, true)
   }
 
