@@ -20,11 +20,11 @@ const fileFilter = function (req, file, callback) {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     return callback(null, true)
   }
-  callback(req.res.status(400).json(
-    { 
-      status: 'Failed',
-      message: 'Avatar must be an image' })
-  )
+
+  return req.res.status(400).send({
+    status: 'Failed',
+    message: 'Avatar must be an image'
+  })
 }
 
 const upload = multer({

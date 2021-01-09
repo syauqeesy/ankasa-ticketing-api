@@ -17,13 +17,11 @@ const upload = (req, res, next) => {
     }
 
     if (error) {
-      console.log(error)
       return res.status(500).send({
         status: 'Failed',
         message: 'Internal server error'
       })
     }
-
     next()
   })
 }
