@@ -144,11 +144,16 @@ module.exports = router
         })
       }
 
+      booking.schedule.airlineLogo = `${process.env.BASE_URL}/images/${booking.schedule.airlineLogo}`
+
       return res.status(200).json({
         status: 'Success',
         message: 'Booking found!',
         booking
       })
+
+      
+
     } catch (error) {
       console.log(error)
       return res.status(500).json({

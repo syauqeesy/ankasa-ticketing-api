@@ -1,3 +1,4 @@
+require('dotenv').config()
 'use strict'
 const {
   Model
@@ -13,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.hasMany(Facility, { foreignKey: 'scheduleId', as: 'facilities' })
       this.hasMany(Ticket, { foreignKey: 'scheduleId', as: 'tickets' })
+    }
+    toJSON () {
+      return { ...this.get(), airlineLogo: `${process.env.BASE_URL}/images/${this.getDataValue('airlineLogo')}` }
     }
   }
   Schedule.init({
