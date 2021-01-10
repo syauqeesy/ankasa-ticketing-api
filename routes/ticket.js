@@ -157,3 +157,36 @@ module.exports = router
       })
     }
   })
+  .delete('/history/:ticketId', authenticationToken, async (req, res) => {
+    try {
+      const booking = await Ticket.findOne({
+        where: {
+          id: req.params.ticketId
+        },
+        include: {
+          model: Schedule,
+          as: 'schedule'
+        }
+      })
+
+      if (!booking) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'History not found!'
+        })
+      }
+
+      await Ticket.destroy({ where: { id: req.params.ticketId } })
+
+      return res.status(200).json({
+        status: 'Success',
+        message: 'History deleted!'
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })
