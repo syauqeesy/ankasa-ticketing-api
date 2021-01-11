@@ -16,11 +16,11 @@ const limit = {
 }
 
 const fileFilter = function (req, file, callback) {
-  if (file.mimetype !== 'image/jpeg' || file.mimetype !== 'image/png') {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     return callback(null, true)
   }
 
-  return req.res.status(400).send({
+  req.res.status(400).send({
     status: 'Failed',
     message: 'Avatar must be an image'
   })
