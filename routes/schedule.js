@@ -63,8 +63,8 @@ module.exports = router
             }
           }
         },
-        limit: 10,
-        offset: index * 10 - 10
+        limit: 5,
+        offset: index * 5 - 5
       })
 
       if (schedules.length < 1) {
@@ -106,7 +106,7 @@ module.exports = router
         pagination: {
           previousPage: index - 1 > 0 ? index - 1 : null,
           currentPage: index,
-          nextPage: index + 1 <= Math.ceil(parseInt(numOfSchedules.length) / 10) ? index + 1 : null
+          nextPage: index + 1 <= Math.ceil(parseInt(numOfSchedules.length) / 5) ? index + 1 : null
         }
       })
     } catch (error) {
