@@ -2,6 +2,7 @@ const { Schedule, Facility, Ticket, User } = require('../models')
 const { Op } = require('sequelize')
 const router = require('express').Router()
 const authenticationToken = require('../helpers/authentificationToken')
+const moment = require('moment')
 
 module.exports = router
   .post('/', authenticationToken, async (req, res) => {
@@ -64,7 +65,12 @@ module.exports = router
           as: 'tickets',
           include: {
             model: Schedule,
-            as: 'schedule'
+            as: 'schedule',
+            where: {
+              departureTime: {
+                [Op.between]: [moment(new Date()).format('YYYY-MM-DD hh:mm:ss'), '9999-12-31 00:00:00']
+              }
+            }
           }
         }
       })
@@ -100,7 +106,12 @@ module.exports = router
           as: 'tickets',
           include: {
             model: Schedule,
-            as: 'schedule'
+            as: 'schedule',
+            where: {
+              arrivedTime: {
+                [Op.between]: ['2000-12-31 00:00:00', moment(new Date()).format('YYYY-MM-DD hh:mm:ss')]
+              }
+            }
           }
         }
       })
