@@ -73,10 +73,36 @@ module.exports = router
           message: 'Schedules not found'
         })
       }
+
+      const whereClause = []
+
+      for (schedule of schedules) {
+        whereClause.push({ id: schedule.id })
+      }
+
+      const data = await Schedule.findAll({
+        where: {
+          [Op.or]: whereClause
+        },
+        include: {
+          model: Facility,
+          as: 'facilities'
+        }
+      })
+
+      if (data.length < 1) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'Schedules not found'
+        })
+      }
+
+
+
       return res.status(200).json({
         status: 'Success',
         message: 'Schedules data fetched',
-        schedules,
+        schedules: data,
         pagination: {
           previousPage: index - 1 > 0 ? index - 1 : null,
           currentPage: index,
