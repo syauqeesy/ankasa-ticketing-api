@@ -6,23 +6,25 @@ This is a code backend ticket project created using node js, express js and sequ
 1. Clone the repo
 https://github.com/syauqeesy/ankasa-ticketing-api.git
 
-2. Install NPM Packages and create database
+2. Add .env file at root folder project, and add following
+PORT=
+BASE_URL=
+SECRET_KEY=
+NODE_ENV=
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+```
+
+3. Install NPM Packages and create database
 yarn install
 yarn sequelize db:create
 yarn sequelize db:migrate
 
 yarn start or yarn dev
 
-3. Add .env file at root folder project, and add following
-PORT = 5000
-BASE_URL = http://localhost:5000
-SECRET_KEY = wqe8qwhqfh9w0qelad0fd0sfjsand189hdsakdas9wqhd8dsa0heqdlclnvlsdsadkv
-NODE_ENV = development
-DB_HOST = localhost
-DB_USER = root
-DB_PASSWORD =
-DB_NAME = ticketing
-```
+
 # Rest API
 You can view my Postman collection </br>
 [![run in Postman](https://run.pstmn.io/button.svg)](https://www.getpostman.com/collections/2eeb42b4fccd98b0bdee)
