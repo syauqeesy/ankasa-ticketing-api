@@ -5,6 +5,7 @@ const multer = require('multer')
 const jwt = require('jsonwebtoken')
 const { uploadMulter } = require('../middlewares/upload')
 const authenticationToken = require('../helpers/authentificationToken')
+const sendEmailForgotPassword = require('../helpers/sendEmailForgotPassword')
 
 const upload = (req, res, next) => {
   const handleUpload = uploadMulter.single('avatar')
@@ -65,7 +66,6 @@ module.exports = router
         })
       } else {
         (
-
           bcrypt.compare(req.body.password, data.password, function (err, resCheck) {
             if (!resCheck) {
               res.status(401).json({
@@ -134,6 +134,59 @@ module.exports = router
       res.status(200).json({
         status: 'Success',
         message: 'Data user has been updated'
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })
+  .post('/forgotpassword', async (req, res) => {
+    try {
+      const data = await User.findOne({ where: { email: req.body.email } })
+      if (!data) {
+        res.json({
+          message: 'Email not found'
+        })
+      } else {
+        idUser = data.id
+        email = data.email
+        fullName = data.fullName
+        sendEmailForgotPassword(email, idUser, fullName)
+        res.status(200).json({
+          status: 'Success',
+          Message: 'Send mail success'
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        status: 'Failed',
+        message: 'Internal server error!'
+      })
+    }
+  })
+  .patch('/changepassword/:idUser', async (req, res) => {
+    try {
+      const id = req.params.idUser
+      const checkId = await User.findOne({ where: { id: id } })
+      if (!checkId) {
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'ID User not Found'
+        })
+      }
+      
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.password, salt, function (err, hash) {
+          User.update({ password: hash, updatedAt: new Date() }, { where: { id: id } })
+          return res.status(200).json({
+            status: 'Success',
+            message: 'Password has been updated'
+          })
+        })
       })
     } catch (error) {
       console.log(error)
