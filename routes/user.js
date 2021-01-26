@@ -39,8 +39,8 @@ module.exports = router
           message: 'email already exists'
         })
       } else {
-        bcrypt.genSalt(10, function (err, salt) {
-          bcrypt.hash(password, salt, function (err, hash) {
+        bcrypt.genSalt(10, function (_err, salt) {
+          bcrypt.hash(password, salt, function (_err, hash) {
             User.create({ fullName: fullName, email: email, password: hash, createdAt: new Date() })
             return res.status(200).json({
               status: 'Success',
@@ -66,7 +66,7 @@ module.exports = router
         })
       } else {
         (
-          bcrypt.compare(req.body.password, data.password, function (err, resCheck) {
+          bcrypt.compare(req.body.password, data.password, function (_err, resCheck) {
             if (!resCheck) {
               res.status(401).json({
                 status: 'Failed',
@@ -74,7 +74,7 @@ module.exports = router
               })
             }
 
-            jwt.sign({ idUser: data.id, email: data.email, role: data.role }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (err, token) {
+            jwt.sign({ idUser: data.id, email: data.email, role: data.role }, process.env.SECRET_KEY, { expiresIn: '24h' }, function (_err, token) {
               const dataLogin = {
                 id: data.id,
                 email: data.email,
@@ -151,9 +151,9 @@ module.exports = router
           message: 'Email not found'
         })
       } else {
-        idUser = data.id
-        email = data.email
-        fullName = data.fullName
+        const idUser = data.id
+        const email = data.email
+        const fullName = data.fullName
         sendEmailForgotPassword(email, idUser, fullName)
         res.status(200).json({
           status: 'Success',
@@ -178,9 +178,8 @@ module.exports = router
           message: 'ID User not Found'
         })
       }
-      
-      bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(req.body.password, salt, function (err, hash) {
+      bcrypt.genSalt(10, function (_, salt) {
+        bcrypt.hash(req.body.password, salt, function (_, hash) {
           User.update({ password: hash, updatedAt: new Date() }, { where: { id: id } })
           return res.status(200).json({
             status: 'Success',
